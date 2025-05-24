@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الخدمات - نظام إدارة الموارد البشرية</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#1E3D59',secondary:'#17A2B8'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Cairo', sans-serif;
+background-color: #f7f7f7;
+}
+html[lang="en"] body {
+font-family: 'Poppins', sans-serif;
+}
+.transition-all {
+transition: all 0.3s ease-in-out;
+}
+.service-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.tooltip {
+position: relative;
+}
+.tooltip::after {
+content: attr(data-tooltip);
+position: absolute;
+bottom: 125%;
+right: 50%;
+transform: translateX(50%);
+padding: 5px 10px;
+background: rgba(0, 0, 0, 0.8);
+color: white;
+border-radius: 4px;
+font-size: 12px;
+opacity: 0;
+visibility: hidden;
+transition: 0.3s;
+white-space: nowrap;
+z-index: 10;
+}
+html[lang="en"] .tooltip::after {
+right: auto;
+left: 50%;
+transform: translateX(-50%);
+}
+.tooltip:hover::after {
+opacity: 1;
+visibility: visible;
+}
+.feature-icon {
+transition: all 0.3s ease;
+}
+.service-card:hover .feature-icon {
+transform: scale(1.1);
+}
+</style>
+</head>
+<body class="min-h-screen">
+<!-- Header -->
+<header class="bg-white shadow-md">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center">
+<a href="#" class="text-primary text-2xl font-['Pacifico']">logo</a>
+<h1 class="mr-4 ml-4 text-xl font-bold text-primary">الفكرة</h1>
+</div>
+<!-- Navigation -->
+<nav class="hidden md:flex space-x-4 space-x-reverse">
+<a href="/" class="px-3 py-2 text-primary hover:text-secondary transition-all">الرئيسية</a>
+<a href="/services.html" class="px-3 py-2 text-secondary font-medium transition-all border-b-2 border-secondary">الخدمات</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">التسعير</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">حول النظام</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">اتصل بنا</a>
+</nav>
+<!-- Right side controls -->
+<div class="flex items-center space-x-4 space-x-reverse">
+<!-- Language toggle -->
+<button id="langToggle" class="px-3 py-1 border border-primary text-primary rounded-button hover:bg-primary hover:text-white transition-all text-sm !rounded-button whitespace-nowrap cursor-pointer">
+EN / AR
+</button>
+<!-- Login button -->
+<a href="#" id="loginBtn" class="px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90 transition-all text-sm font-medium !rounded-button whitespace-nowrap flex items-center cursor-pointer">
+<i class="ri-login-box-line mr-2"></i>
+تسجيل الدخول
+</a>
+</div>
+</div>
+</div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-b from-primary to-primary/80 text-white py-16">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2 mb-8 md:mb-0">
+        <h1 class="text-4xl font-bold mb-4">خدماتنا المتكاملة لإدارة الموارد البشرية</h1>
+        <p class="text-lg mb-6">نقدم مجموعة شاملة من الحلول المبتكرة لتبسيط عمليات الموارد البشرية وتعزيز إنتاجية فريقك</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#services" class="px-6 py-3 bg-white text-primary rounded-button font-medium hover:bg-gray-100 transition-all !rounded-button whitespace-nowrap cursor-pointer">استكشف خدماتنا</a>
+          <a href="#contact" class="px-6 py-3 bg-secondary text-white rounded-button font-medium hover:bg-secondary/90 transition-all !rounded-button whitespace-nowrap cursor-pointer">تواصل معنا</a>
+        </div>
+      </div>
+      <div class="md:w-1/2">
+        <img src="https://readdy.ai/api/search-image?query=professional%20HR%20management%20system%20dashboard%20with%20modern%20UI%2C%20clean%20design%2C%20showing%20employee%20data%20analytics%20and%20charts%2C%20light%20theme%2C%20high%20quality%20professional%20software%20interface&width=600&height=400&seq=1&orientation=landscape" alt="نظام إدارة الموارد البشرية" class="rounded-lg shadow-lg">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Services Section -->
+<section id="services" class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">خدماتنا الرئيسية</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">نقدم مجموعة متكاملة من الخدمات المصممة خصيصًا لتلبية احتياجات إدارة الموارد البشرية في مؤسستك</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Service 1 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-user-line text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">إدارة بيانات الموظفين</h3>
+        <p class="text-gray-600 mb-4">نظام متكامل لإدارة جميع بيانات الموظفين بما في ذلك المعلومات الشخصية، الوثائق، المؤهلات، والمهارات.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>ملفات شخصية شاملة للموظفين</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>إدارة الوثائق والمستندات</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تتبع المهارات والمؤهلات</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-time-line text-green-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">إدارة الحضور والانصراف</h3>
+        <p class="text-gray-600 mb-4">نظام متطور لتسجيل وتتبع حضور الموظفين وانصرافهم بدقة عالية مع تقارير تفصيلية.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تسجيل الحضور والانصراف آليًا</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تتبع ساعات العمل الإضافية</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تقارير الحضور المفصلة</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-calendar-line text-yellow-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">إدارة الإجازات</h3>
+        <p class="text-gray-600 mb-4">نظام شامل لإدارة طلبات الإجازات والموافقات مع تتبع رصيد الإجازات لكل موظف.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>طلب وموافقة الإجازات إلكترونيًا</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تتبع رصيد الإجازات المتبقي</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>جدولة الإجازات وتنظيمها</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-money-dollar-circle-line text-purple-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">إدارة الرواتب</h3>
+        <p class="text-gray-600 mb-4">نظام متكامل لحساب وإدارة رواتب الموظفين مع دعم للبدلات والخصومات والضرائب.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>حساب الرواتب آليًا</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>إدارة البدلات والخصومات</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>إصدار قسائم الرواتب</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-file-list-3-line text-red-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">إدارة التوظيف</h3>
+        <p class="text-gray-600 mb-4">نظام شامل لإدارة عملية التوظيف من نشر الوظائف إلى تعيين الموظفين الجدد.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>نشر الوظائف الشاغرة</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>فرز وتقييم المرشحين</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>إدارة المقابلات والاختبارات</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-bar-chart-line text-indigo-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-primary mb-3">التقارير والتحليلات</h3>
+        <p class="text-gray-600 mb-4">مجموعة شاملة من التقارير والتحليلات لمساعدتك في اتخاذ قرارات مستنيرة بشأن الموارد البشرية.</p>
+        <ul class="space-y-2 mb-4">
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تقارير أداء الموظفين</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>تحليلات معدل دوران الموظفين</span>
+          </li>
+          <li class="flex items-start">
+            <i class="ri-check-line text-green-500 ml-2 mt-1"></i>
+            <span>لوحات معلومات تفاعلية</span>
+          </li>
+        </ul>
+        <a href="#" class="text-secondary hover:text-primary transition-all flex items-center cursor-pointer">
+          <span>اكتشف المزيد</span>
+          <i class="ri-arrow-left-line mr-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Advanced Features Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">ميزات متقدمة</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">اكتشف الميزات المتقدمة التي تميز نظامنا عن غيره من أنظمة إدارة الموارد البشرية</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-robot-line text-primary text-xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">المساعد الذكي</h3>
+        <p class="text-gray-600">مساعد ذكي مدعوم بالذكاء الاصطناعي لمساعدة المستخدمين في استخدام النظام وحل المشكلات.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-smartphone-line text-green-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">تطبيق الجوال</h3>
+        <p class="text-gray-600">تطبيق جوال متكامل يتيح للموظفين والمديرين الوصول إلى النظام في أي وقت ومن أي مكان.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-fingerprint-line text-yellow-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">البصمة البيومترية</h3>
+        <p class="text-gray-600">دعم لأنظمة البصمة البيومترية لتسجيل الحضور والانصراف بدقة عالية وأمان متكامل.</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-global-line text-purple-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">دعم متعدد اللغات</h3>
+        <p class="text-gray-600">دعم كامل للغة العربية والإنجليزية وغيرها من اللغات لتلبية احتياجات المؤسسات المختلفة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Integration Section -->
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">التكامل مع الأنظمة الأخرى</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">يتكامل نظامنا بسلاسة مع مجموعة واسعة من الأنظمة والتطبيقات الأخرى</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <!-- Integration 1 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-microsoft-line text-blue-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">Microsoft 365</h3>
+      </div>
+
+      <!-- Integration 2 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-google-line text-red-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">Google Workspace</h3>
+      </div>
+
+      <!-- Integration 3 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-slack-line text-purple-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">Slack</h3>
+      </div>
+
+      <!-- Integration 4 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-bank-line text-green-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">الأنظمة المصرفية</h3>
+      </div>
+
+      <!-- Integration 5 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-file-excel-line text-green-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">أنظمة المحاسبة</h3>
+      </div>
+
+      <!-- Integration 6 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 text-center transition-all service-card">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 feature-icon">
+          <i class="ri-customer-service-line text-blue-600 text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-primary">أنظمة خدمة العملاء</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">آراء عملائنا</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">استمع إلى ما يقوله عملاؤنا عن تجربتهم مع نظام إدارة الموارد البشرية</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Testimonial 1 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center ml-3">
+            <span class="text-primary font-medium">أ</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary">أحمد السعيد</h4>
+            <p class="text-sm text-gray-600">مدير الموارد البشرية - شركة التقنية المتطورة</p>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex text-yellow-400">
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+          </div>
+        </div>
+        <p class="text-gray-600">"ساعدنا نظام الفكرة في تحسين كفاءة إدارة الموارد البشرية بشكل كبير. أصبحت عمليات التوظيف والحضور وإدارة الإجازات أكثر سلاسة وفعالية. أنصح به بشدة لجميع الشركات."</p>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center ml-3">
+            <span class="text-green-600 font-medium">س</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary">سارة المهندس</h4>
+            <p class="text-sm text-gray-600">مديرة الشؤون الإدارية - مجموعة الخليج</p>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex text-yellow-400">
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-half-fill"></i>
+          </div>
+        </div>
+        <p class="text-gray-600">"النظام سهل الاستخدام ويوفر تقارير مفصلة تساعدنا في اتخاذ قرارات أفضل. فريق الدعم الفني ممتاز ويستجيب بسرعة لأي استفسارات. تجربة رائعة بشكل عام."</p>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 transition-all service-card">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center ml-3">
+            <span class="text-purple-600 font-medium">م</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary">محمد العبدالله</h4>
+            <p class="text-sm text-gray-600">الرئيس التنفيذي - شركة المستقبل للتقنية</p>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex text-yellow-400">
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+            <i class="ri-star-fill"></i>
+          </div>
+        </div>
+        <p class="text-gray-600">"استثمارنا في نظام الفكرة كان من أفضل القرارات التي اتخذناها. وفر لنا الكثير من الوقت والجهد، وساعدنا في تحسين رضا الموظفين. العائد على الاستثمار كان ممتازًا."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 bg-primary text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-6">جاهز لتحسين إدارة الموارد البشرية في مؤسستك؟</h2>
+    <p class="text-lg mb-8 max-w-3xl mx-auto">انضم إلى آلاف الشركات التي تستخدم نظام الفكرة لإدارة مواردها البشرية بكفاءة وفعالية</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="#" class="px-8 py-3 bg-white text-primary rounded-button font-medium hover:bg-gray-100 transition-all !rounded-button whitespace-nowrap cursor-pointer">طلب عرض توضيحي</a>
+      <a href="#" class="px-8 py-3 bg-secondary text-white rounded-button font-medium hover:bg-secondary/90 transition-all !rounded-button whitespace-nowrap cursor-pointer">ابدأ الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq" class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">الأسئلة الشائعة</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">إجابات على الأسئلة الأكثر شيوعًا حول خدماتنا</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+      <div class="space-y-4" id="faqAccordion">
+        <!-- FAQ Item 1 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="w-full flex items-center justify-between p-4 text-right bg-white hover:bg-gray-50 transition-all cursor-pointer faq-toggle" data-target="faq1">
+            <span class="font-medium text-primary">كيف يمكنني البدء باستخدام النظام؟</span>
+            <i class="ri-arrow-down-s-line text-primary transition-all"></i>
+          </button>
+          <div id="faq1" class="p-4 bg-gray-50 hidden">
+            <p class="text-gray-600">يمكنك البدء باستخدام النظام من خلال التسجيل في موقعنا والاشتراك في الخطة التي تناسب احتياجات مؤسستك. بعد ذلك، سيقوم فريق الدعم الفني بالتواصل معك لإعداد النظام وتدريب فريقك على استخدامه.</p>
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="w-full flex items-center justify-between p-4 text-right bg-white hover:bg-gray-50 transition-all cursor-pointer faq-toggle" data-target="faq2">
+            <span class="font-medium text-primary">هل يمكن تخصيص النظام ليناسب احتياجات مؤسستي؟</span>
+            <i class="ri-arrow-down-s-line text-primary transition-all"></i>
+          </button>
+          <div id="faq2" class="p-4 bg-gray-50 hidden">
+            <p class="text-gray-600">نعم، يمكن تخصيص النظام بشكل كامل ليناسب احتياجات مؤسستك. يمكنك تخصيص نماذج البيانات، سير العمل، التقارير، والواجهة لتعكس هوية مؤسستك وتلبي متطلباتها الخاصة.</p>
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="w-full flex items-center justify-between p-4 text-right bg-white hover:bg-gray-50 transition-all cursor-pointer faq-toggle" data-target="faq3">
+            <span class="font-medium text-primary">ما هي متطلبات النظام للاستخدام؟</span>
+            <i class="ri-arrow-down-s-line text-primary transition-all"></i>
+          </button>
+          <div id="faq3" class="p-4 bg-gray-50 hidden">
+            <p class="text-gray-600">النظام يعمل على الويب ولا يتطلب أي تثبيت خاص. كل ما تحتاجه هو متصفح ويب حديث واتصال بالإنترنت. كما يتوفر تطبيق للهواتف الذكية يعمل على أنظمة Android و iOS.</p>
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="w-full flex items-center justify-between p-4 text-right bg-white hover:bg-gray-50 transition-all cursor-pointer faq-toggle" data-target="faq4">
+            <span class="font-medium text-primary">كيف يتم تأمين بيانات المؤسسة والموظفين؟</span>
+            <i class="ri-arrow-down-s-line text-primary transition-all"></i>
+          </button>
+          <div id="faq4" class="p-4 bg-gray-50 hidden">
+            <p class="text-gray-600">نحن نأخذ أمن البيانات على محمل الجد. يستخدم النظام تشفير SSL/TLS لجميع البيانات المنقولة، ويتم تخزين البيانات في مراكز بيانات آمنة مع نسخ احتياطية منتظمة. كما نطبق سياسات صارمة للوصول إلى البيانات وفقًا لمعايير الأمان العالمية.</p>
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="w-full flex items-center justify-between p-4 text-right bg-white hover:bg-gray-50 transition-all cursor-pointer faq-toggle" data-target="faq5">
+            <span class="font-medium text-primary">هل يوفر النظام الدعم الفني؟</span>
+            <i class="ri-arrow-down-s-line text-primary transition-all"></i>
+          </button>
+          <div id="faq5" class="p-4 bg-gray-50 hidden">
+            <p class="text-gray-600">نعم، نوفر دعمًا فنيًا على مدار الساعة طوال أيام الأسبوع لجميع عملائنا. يمكنك التواصل مع فريق الدعم الفني عبر البريد الإلكتروني، الهاتف، أو نظام التذاكر المتكامل في النظام.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">تواصل معنا</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">نحن هنا للإجابة على جميع استفساراتك. تواصل معنا اليوم للحصول على مزيد من المعلومات حول خدماتنا</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-xl font-semibold text-primary mb-6">أرسل لنا رسالة</h3>
+        <form id="contactForm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
+              <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل اسمك الكامل">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+              <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">اسم الشركة</label>
+            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل اسم شركتك">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">الموضوع</label>
+            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="">اختر الموضوع</option>
+              <option value="sales">استفسار عن المبيعات</option>
+              <option value="support">الدعم الفني</option>
+              <option value="demo">طلب عرض توضيحي</option>
+              <option value="partnership">شراكة</option>
+              <option value="other">أخرى</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">الرسالة</label>
+            <textarea rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="اكتب رسالتك هنا..."></textarea>
+          </div>
+          <button type="submit" class="px-6 py-3 bg-primary text-white rounded-button font-medium hover:bg-primary/90 transition-all !rounded-button whitespace-nowrap cursor-pointer">إرسال الرسالة</button>
+        </form>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-xl font-semibold text-primary mb-6">معلومات الاتصال</h3>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center ml-4 mt-1">
+              <i class="ri-map-pin-line text-primary"></i>
+            </div>
+            <div>
+              <p class="font-medium">العنوان</p>
+              <p class="text-gray-600">برج المستقبل، شارع الملك فهد، الرياض، المملكة العربية السعودية</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center ml-4 mt-1">
+              <i class="ri-phone-line text-green-600"></i>
+            </div>
+            <div>
+              <p class="font-medium">الهاتف</p>
+              <p class="text-gray-600">+966 11 234 5678</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center ml-4 mt-1">
+              <i class="ri-mail-line text-yellow-600"></i>
+            </div>
+            <div>
+              <p class="font-medium">البريد الإلكتروني</p>
+              <p class="text-gray-600">info@alfekra.com</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="text-xl font-semibold text-primary mb-4">ساعات العمل</h3>
+        <div class="space-y-2 mb-8">
+          <div class="flex justify-between">
+            <span class="text-gray-600">الأحد - الخميس:</span>
+            <span>9:00 صباحًا - 5:00 مساءً</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">الجمعة - السبت:</span>
+            <span>مغلق</span>
+          </div>
+        </div>
+
+        <h3 class="text-xl font-semibold text-primary mb-4">تابعنا</h3>
+        <div class="flex space-x-4 space-x-reverse">
+          <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+            <i class="ri-facebook-fill"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+            <i class="ri-twitter-x-fill"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+            <i class="ri-linkedin-fill"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+            <i class="ri-instagram-fill"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-primary text-white py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center mb-4">
+          <a href="#" class="text-white text-2xl font-['Pacifico']">logo</a>
+          <h2 class="mr-2 text-xl font-bold">الفكرة</h2>
+        </div>
+        <p class="mb-4">نظام متكامل لإدارة الموارد البشرية يساعد المؤسسات على تحسين كفاءة عملياتها وزيادة إنتاجية موظفيها.</p>
+        <div class="flex space-x-4 space-x-reverse">
+          <a href="#" class="text-white hover:text-gray-300 transition-all cursor-pointer">
+            <i class="ri-facebook-fill"></i>
+          </a>
+          <a href="#" class="text-white hover:text-gray-300 transition-all cursor-pointer">
+            <i class="ri-twitter-x-fill"></i>
+          </a>
+          <a href="#" class="text-white hover:text-gray-300 transition-all cursor-pointer">
+            <i class="ri-linkedin-fill"></i>
+          </a>
+          <a href="#" class="text-white hover:text-gray-300 transition-all cursor-pointer">
+            <i class="ri-instagram-fill"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">روابط سريعة</h3>
+        <ul class="space-y-2">
+          <li><a href="/" class="hover:text-gray-300 transition-all cursor-pointer">الرئيسية</a></li>
+          <li><a href="/services.html" class="hover:text-gray-300 transition-all cursor-pointer">الخدمات</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">التسعير</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">حول النظام</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">اتصل بنا</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">الخدمات</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">إدارة بيانات الموظفين</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">إدارة الحضور والانصراف</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">إدارة الإجازات</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">إدارة الرواتب</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">إدارة التوظيف</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">التقارير والتحليلات</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">الدعم</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">مركز المساعدة</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">الأسئلة الشائعة</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">التوثيق</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">الدعم الفني</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">سياسة الخصوصية</a></li>
+          <li><a href="#" class="hover:text-gray-300 transition-all cursor-pointer">شروط الاستخدام</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-700 pt-8 text-center">
+      <p>&copy; 2025 الفكرة لإدارة الموارد البشرية. جميع الحقوق محفوظة.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<!-- Login functionality script -->
+<script id="loginScript">
+document.addEventListener('DOMContentLoaded', function() {
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', function(e) {
+e.preventDefault();
+// Create modal backdrop
+const backdrop = document.createElement('div');
+backdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-40';
+document.body.appendChild(backdrop);
+// Create modal content
+const modal = document.createElement('div');
+modal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 w-full max-w-md p-6';
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">اختر نوع الحساب</h2>
+<p class="text-gray-600">الرجاء اختيار نوع حسابك للمتابعة</p>
+</div>
+<div class="space-y-4">
+<button id="companyBtn" class="w-full flex items-center justify-center p-4 border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all group !rounded-button cursor-pointer">
+<i class="ri-building-line ml-2 text-xl"></i>
+<span>تسجيل دخول كشركة</span>
+</button>
+<button id="employeeBtn" class="w-full flex items-center justify-center p-4 border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all group !rounded-button cursor-pointer">
+<i class="ri-user-line ml-2 text-xl"></i>
+<span>تسجيل دخول كموظف</span>
+</button>
+</div>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-pointer" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.body.appendChild(modal);
+// Close modal function
+function closeModal() {
+document.body.removeChild(backdrop);
+document.body.removeChild(modal);
+}
+// Close button event
+document.getElementById('closeModal').addEventListener('click', closeModal);
+backdrop.addEventListener('click', closeModal);
+// Company login form
+function showCompanyForm() {
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">تسجيل دخول الشركة</h2>
+<p class="text-gray-600">أدخل بيانات الشركة للمتابعة</p>
+</div>
+<form id="companyLoginForm" class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني للشركة</label>
+<input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل البريد الإلكتروني">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+<input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل كلمة المرور">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">رقم السجل التجاري</label>
+<input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل رقم السجل التجاري">
+</div>
+<button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-all !rounded-button cursor-pointer">تسجيل الدخول</button>
+<div class="text-center">
+<a href="#" class="text-primary hover:underline text-sm cursor-pointer">نسيت كلمة المرور؟</a>
+</div>
+</form>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-pointer" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('companyLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+// Add your company login logic here
+closeModal();
+});
+}
+// Employee login form
+function showEmployeeForm() {
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">تسجيل دخول الموظف</h2>
+<p class="text-gray-600">أدخل بيانات الموظف للمتابعة</p>
+</div>
+<form id="employeeLoginForm" class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+<input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل البريد الإلكتروني">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+<input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل كلمة المرور">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">الرقم الوظيفي</label>
+<input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل الرقم الوظيفي">
+</div>
+<button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-all !rounded-button cursor-pointer">تسجيل الدخول</button>
+<div class="text-center">
+<a href="#" class="text-primary hover:underline text-sm cursor-pointer">نسيت كلمة المرور؟</a>
+</div>
+</form>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-pointer" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('employeeLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+// Add your employee login logic here
+closeModal();
+});
+}
+// Add click events for company and employee buttons
+document.getElementById('companyBtn').addEventListener('click', showCompanyForm);
+document.getElementById('employeeBtn').addEventListener('click', showEmployeeForm);
+});
+});
+</script>
+
+<!-- Language toggle script -->
+<script id="languageToggleScript">
+document.addEventListener('DOMContentLoaded', function() {
+const langToggle = document.getElementById('langToggle');
+langToggle.addEventListener('click', function() {
+const html = document.documentElement;
+if (html.lang === 'ar') {
+html.lang = 'en';
+html.dir = 'ltr';
+langToggle.textContent = 'AR / EN';
+} else {
+html.lang = 'ar';
+html.dir = 'rtl';
+langToggle.textContent = 'EN / AR';
+}
+});
+});
+</script>
+
+<!-- FAQ Accordion Script -->
+<script id="faqScript">
+document.addEventListener('DOMContentLoaded', function() {
+const faqToggles = document.querySelectorAll('.faq-toggle');
+faqToggles.forEach(toggle => {
+toggle.addEventListener('click', function() {
+const targetId = this.getAttribute('data-target');
+const targetContent = document.getElementById(targetId);
+
+
+// Close all other FAQs
+document.querySelectorAll('[id^="faq"]').forEach(content => {
+if (content.id !== targetId) {
+content.classList.add('hidden');
+content.previousElementSibling.querySelector('i').classList.remove('transform', 'rotate-180');
+}
+});
+
+
+// Toggle current FAQ
+targetContent.classList.toggle('hidden');
+this.querySelector('i').classList.toggle('rotate-180');
+});
+});
+});
+</script>
+
+<!-- Contact Form Script -->
+<script id="contactFormScript">
+document.addEventListener('DOMContentLoaded', function() {
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+contactForm.addEventListener('submit', function(e) {
+e.preventDefault();
+
+
+// Create success message
+const successMessage = document.createElement('div');
+successMessage.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4';
+successMessage.innerHTML = `
+<strong class="font-bold">تم الإرسال بنجاح!</strong>
+<span class="block sm:inline"> سنقوم بالرد عليك في أقرب وقت ممكن.</span>
+`;
+
+// Replace form with success message
+contactForm.innerHTML = '';
+contactForm.appendChild(successMessage);
+
+// Reset form after 3 seconds (for demo purposes)
+setTimeout(() => {
+location.reload();
+}, 3000);
+});
+}
+});
+</script>
+</body>
+</html>
