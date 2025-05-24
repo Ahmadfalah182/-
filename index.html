@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفكرة - نظام إدارة الموارد البشرية</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#1E3D59',secondary:'#17A2B8'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Cairo', sans-serif;
+background-color: #f7f7f7;
+}
+html[lang="en"] body {
+font-family: 'Poppins', sans-serif;
+}
+.transition-all {
+transition: all 0.3s ease-in-out;
+}
+.sidebar-item:hover {
+background-color: rgba(23, 162, 184, 0.1);
+}
+.sidebar-item.active {
+background-color: rgba(23, 162, 184, 0.2);
+border-right: 3px solid #17A2B8;
+}
+html[lang="en"] .sidebar-item.active {
+border-left: 3px solid #17A2B8;
+border-right: none;
+}
+.card-hover:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.chat-message {
+animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.typing-animation::after {
+content: '...';
+animation: typing 1.5s infinite;
+}
+@keyframes typing {
+0% { content: '.'; }
+33% { content: '..'; }
+66% { content: '...'; }
+100% { content: '.'; }
+}
+.notification-badge {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% { transform: scale(1); }
+50% { transform: scale(1.1); }
+100% { transform: scale(1); }
+}
+.dropdown-menu {
+transition: opacity 0.3s, transform 0.3s;
+transform-origin: top right;
+}
+html[lang="en"] .dropdown-menu {
+transform-origin: top left;
+}
+.progress-bar {
+transition: width 0.5s ease-in-out;
+}
+.tooltip {
+position: relative;
+}
+.tooltip::after {
+content: attr(data-tooltip);
+position: absolute;
+bottom: 125%;
+right: 50%;
+transform: translateX(50%);
+padding: 5px 10px;
+background: rgba(0, 0, 0, 0.8);
+color: white;
+border-radius: 4px;
+font-size: 12px;
+opacity: 0;
+visibility: hidden;
+transition: 0.3s;
+white-space: nowrap;
+z-index: 10;
+}
+html[lang="en"] .tooltip::after {
+right: auto;
+left: 50%;
+transform: translateX(-50%);
+}
+.tooltip:hover::after {
+opacity: 1;
+visibility: visible;
+}
+</style>
+</head>
+<body class="min-h-screen">
+<!-- Header -->
+<header class="bg-white shadow-md">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center">
+<a href="#" class="text-primary text-2xl font-['Pacifico']">logo</a>
+<h1 class="mr-4 ml-4 text-xl font-bold text-primary">الفكرة</h1>
+</div>
+<!-- Navigation -->
+<nav class="hidden md:flex space-x-4 space-x-reverse">
+<a href="/" class="px-3 py-2 text-primary hover:text-secondary transition-all">الرئيسية</a>
+<a href="/services.html" class="px-3 py-2 text-primary hover:text-secondary transition-all">الخدمات</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">التسعير</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">حول النظام</a>
+<a href="#" class="px-3 py-2 text-primary hover:text-secondary transition-all">اتصل بنا</a>
+</nav>
+<!-- Right side controls -->
+<div class="flex items-center space-x-4 space-x-reverse">
+<!-- Language toggle -->
+<button id="langToggle" class="px-3 py-1 border border-primary text-primary rounded-button hover:bg-primary hover:text-white transition-all text-sm !rounded-button whitespace-nowrap">
+EN / AR
+</button>
+<!-- Login button -->
+<a href="#" id="loginBtn" class="px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90 transition-all text-sm font-medium !rounded-button whitespace-nowrap flex items-center">
+<i class="ri-login-box-line mr-2"></i>
+تسجيل الدخول
+</a>
+</div>
+</div>
+</div>
+</header>
+<div class="flex">
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-md h-screen sticky top-0 hidden md:block">
+<div class="p-4">
+<div class="mb-6">
+<h2 class="text-lg font-semibold text-primary">لوحة التحكم</h2>
+</div>
+<nav>
+<ul class="space-y-1">
+<li>
+<a href="#" class="sidebar-item active flex items-center p-2 rounded-md text-primary">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-dashboard-line"></i>
+</div>
+<span>الرئيسية</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-user-line"></i>
+</div>
+<span>الموظفين</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-file-list-3-line"></i>
+</div>
+<span>السير الذاتية</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-building-line"></i>
+</div>
+<span>المؤسسات</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-calendar-line"></i>
+</div>
+<span>الإجازات</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-time-line"></i>
+</div>
+<span>الحضور والانصراف</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-money-dollar-circle-line"></i>
+</div>
+<span>الرواتب</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-bar-chart-line"></i>
+</div>
+<span>التقارير</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-settings-line"></i>
+</div>
+<span>الإعدادات</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="mt-8 pt-4 border-t border-gray-200">
+<a href="#" class="sidebar-item flex items-center p-2 rounded-md text-gray-600 hover:text-primary transition-all">
+<div class="w-6 h-6 flex items-center justify-center ml-2">
+<i class="ri-question-line"></i>
+</div>
+<span>المساعدة والدعم</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main content -->
+<main class="flex-1 p-6">
+<div class="container mx-auto">
+<!-- Page header -->
+<div class="mb-8">
+<h1 class="text-2xl font-bold text-primary mb-2">لوحة التحكم</h1>
+<p class="text-gray-600">نظرة عامة على نظام إدارة الموارد البشرية</p>
+</div>
+<!-- Stats cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-white rounded-lg shadow-sm p-6 transition-all card-hover">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-gray-700">إجمالي الموظفين</h3>
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+<i class="ri-user-line text-primary"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-primary">248</p>
+<p class="text-sm text-green-500 mt-2 flex items-center">
+<span class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-arrow-up-line"></i>
+</span>
+<span>زيادة 12% من الشهر الماضي</span>
+</p>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 transition-all card-hover">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-gray-700">طلبات التوظيف</h3>
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+<i class="ri-file-list-3-line text-green-600"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-primary">37</p>
+<p class="text-sm text-green-500 mt-2 flex items-center">
+<span class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-arrow-up-line"></i>
+</span>
+<span>زيادة 5% من الأسبوع الماضي</span>
+</p>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 transition-all card-hover">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-gray-700">طلبات الإجازات</h3>
+<div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+<i class="ri-calendar-line text-yellow-600"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-primary">12</p>
+<p class="text-sm text-red-500 mt-2 flex items-center">
+<span class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-arrow-down-line"></i>
+</span>
+<span>انخفاض 3% من الأسبوع الماضي</span>
+</p>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 transition-all card-hover">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-gray-700">المؤسسات</h3>
+<div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+<i class="ri-building-line text-purple-600"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-primary">18</p>
+<p class="text-sm text-gray-500 mt-2 flex items-center">
+<span>لا تغيير عن الشهر الماضي</span>
+</p>
+</div>
+</div>
+<!-- Main content sections -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Recent activities -->
+<div class="lg:col-span-2">
+<div class="bg-white rounded-lg shadow-sm p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-primary">النشاطات الأخيرة</h2>
+<button class="text-sm text-secondary hover:underline !rounded-button whitespace-nowrap">عرض الكل</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-start">
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center ml-4 mt-1">
+<i class="ri-user-add-line text-primary"></i>
+</div>
+<div>
+<p class="font-medium">تم إضافة موظف جديد</p>
+<p class="text-sm text-gray-600">تم إضافة سارة أحمد كمطور واجهة أمامية</p>
+<p class="text-xs text-gray-400 mt-1">منذ ساعتين</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center ml-4 mt-1">
+<i class="ri-file-list-3-line text-green-600"></i>
+</div>
+<div>
+<p class="font-medium">تم استلام سيرة ذاتية جديدة</p>
+<p class="text-sm text-gray-600">محمد خالد تقدم لوظيفة مدير مشروع</p>
+<p class="text-xs text-gray-400 mt-1">منذ 3 ساعات</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center ml-4 mt-1">
+<i class="ri-calendar-line text-yellow-600"></i>
+</div>
+<div>
+<p class="font-medium">طلب إجازة جديد</p>
+<p class="text-sm text-gray-600">عمر محمود طلب إجازة لمدة 3 أيام</p>
+<p class="text-xs text-gray-400 mt-1">منذ 5 ساعات</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center ml-4 mt-1">
+<i class="ri-time-line text-red-600"></i>
+</div>
+<div>
+<p class="font-medium">تأخر في الحضور</p>
+<p class="text-sm text-gray-600">فاطمة علي تأخرت عن موعد الحضور 30 دقيقة</p>
+<p class="text-xs text-gray-400 mt-1">منذ 6 ساعات</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Assistant -->
+<div class="lg:col-span-1">
+<div class="bg-white rounded-lg shadow-sm p-6 h-full flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-primary">المساعد الذكي</h2>
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
+<i class="ri-robot-line"></i>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto mb-4 space-y-4" id="chatMessages">
+<div class="chat-message flex">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center ml-2 mt-1">
+<i class="ri-robot-line"></i>
+</div>
+<div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+<p class="text-sm">مرحباً! أنا المساعد الذكي الخاص بك. كيف يمكنني مساعدتك اليوم؟</p>
+</div>
+</div>
+<div class="chat-message flex justify-end">
+<div class="bg-primary text-white rounded-lg p-3 max-w-[80%]">
+<p class="text-sm">كيف يمكنني إضافة موظف جديد؟</p>
+</div>
+</div>
+<div class="chat-message flex">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center ml-2 mt-1">
+<i class="ri-robot-line"></i>
+</div>
+<div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+<p class="text-sm">لإضافة موظف جديد، اتبع الخطوات التالية:</p>
+<ol class="text-sm list-decimal list-inside mt-2 space-y-1">
+<li>انتقل إلى قسم "الموظفين" من القائمة الجانبية</li>
+<li>انقر على زر "إضافة موظف جديد"</li>
+<li>املأ النموذج بالمعلومات المطلوبة</li>
+<li>انقر على "حفظ" لإتمام العملية</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="relative">
+<input type="text" id="chatInput" placeholder="اكتب سؤالك هنا..." class="w-full py-2 px-4 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+<button id="sendMessage" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center text-primary hover:text-secondary transition-all">
+<i class="ri-send-plane-fill"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Charts and analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-primary mb-6">توزيع الموظفين حسب القسم</h2>
+<div id="departmentChart" class="h-80"></div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-primary mb-6">معدل التوظيف الشهري</h2>
+<div id="hiringChart" class="h-80"></div>
+</div>
+</div>
+<!-- Recent employees -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-primary">الموظفين الجدد</h2>
+<button class="text-sm text-secondary hover:underline !rounded-button whitespace-nowrap">عرض الكل</button>
+</div>
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-gray-200">
+<thead>
+<tr>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المسمى الوظيفي</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">القسم</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ التعيين</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
+</tr>
+</thead>
+<tbody class="bg-white divide-y divide-gray-200">
+<tr>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center ml-2">
+<span class="text-primary font-medium">س</span>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">سارة أحمد</div>
+<div class="text-sm text-gray-500">sarah@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">مطور واجهة أمامية</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">تطوير البرمجيات</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">23 مايو 2025</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">نشط</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<div class="flex space-x-2 space-x-reverse">
+<button class="tooltip w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-50 rounded-full transition-all" data-tooltip="عرض">
+<i class="ri-eye-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-full transition-all" data-tooltip="تعديل">
+<i class="ri-edit-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-red-600 hover:bg-red-50 rounded-full transition-all" data-tooltip="حذف">
+<i class="ri-delete-bin-line"></i>
+</button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center ml-2">
+<span class="text-green-600 font-medium">م</span>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">محمد عبدالله</div>
+<div class="text-sm text-gray-500">mohamed@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">مهندس برمجيات</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">تطوير البرمجيات</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">20 مايو 2025</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">نشط</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<div class="flex space-x-2 space-x-reverse">
+<button class="tooltip w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-50 rounded-full transition-all" data-tooltip="عرض">
+<i class="ri-eye-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-full transition-all" data-tooltip="تعديل">
+<i class="ri-edit-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-red-600 hover:bg-red-50 rounded-full transition-all" data-tooltip="حذف">
+<i class="ri-delete-bin-line"></i>
+</button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center ml-2">
+<span class="text-purple-600 font-medium">ف</span>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">فاطمة علي</div>
+<div class="text-sm text-gray-500">fatima@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">مصمم تجربة مستخدم</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">التصميم</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">18 مايو 2025</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">نشط</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<div class="flex space-x-2 space-x-reverse">
+<button class="tooltip w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-50 rounded-full transition-all" data-tooltip="عرض">
+<i class="ri-eye-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-full transition-all" data-tooltip="تعديل">
+<i class="ri-edit-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-red-600 hover:bg-red-50 rounded-full transition-all" data-tooltip="حذف">
+<i class="ri-delete-bin-line"></i>
+</button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center ml-2">
+<span class="text-yellow-600 font-medium">ع</span>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">عمر محمود</div>
+<div class="text-sm text-gray-500">omar@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">محلل أعمال</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">تحليل الأعمال</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 مايو 2025</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">إجازة</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<div class="flex space-x-2 space-x-reverse">
+<button class="tooltip w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-50 rounded-full transition-all" data-tooltip="عرض">
+<i class="ri-eye-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-full transition-all" data-tooltip="تعديل">
+<i class="ri-edit-line"></i>
+</button>
+<button class="tooltip w-8 h-8 flex items-center justify-center text-red-600 hover:bg-red-50 rounded-full transition-all" data-tooltip="حذف">
+<i class="ri-delete-bin-line"></i>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Quick actions -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-primary mb-6">إجراءات سريعة</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all !rounded-button whitespace-nowrap">
+<div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mb-3">
+<i class="ri-user-add-line text-primary text-xl"></i>
+</div>
+<span class="text-sm font-medium">إضافة موظف جديد</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all !rounded-button whitespace-nowrap">
+<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
+<i class="ri-file-list-3-line text-green-600 text-xl"></i>
+</div>
+<span class="text-sm font-medium">مراجعة السير الذاتية</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all !rounded-button whitespace-nowrap">
+<div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mb-3">
+<i class="ri-calendar-line text-yellow-600 text-xl"></i>
+</div>
+<span class="text-sm font-medium">إدارة الإجازات</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all !rounded-button whitespace-nowrap">
+<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-3">
+<i class="ri-bar-chart-line text-purple-600 text-xl"></i>
+</div>
+<span class="text-sm font-medium">إنشاء تقرير</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<!-- Login functionality script -->
+<script id="loginScript">
+document.addEventListener('DOMContentLoaded', function() {
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', function(e) {
+e.preventDefault();
+// Create modal backdrop
+const backdrop = document.createElement('div');
+backdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-40';
+document.body.appendChild(backdrop);
+// Create modal content
+const modal = document.createElement('div');
+modal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 w-full max-w-md p-6';
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">اختر نوع الحساب</h2>
+<p class="text-gray-600">الرجاء اختيار نوع حسابك للمتابعة</p>
+</div>
+<div class="space-y-4">
+<button id="companyBtn" class="w-full flex items-center justify-center p-4 border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all group !rounded-button">
+<i class="ri-building-line ml-2 text-xl"></i>
+<span>تسجيل دخول كشركة</span>
+</button>
+<button id="employeeBtn" class="w-full flex items-center justify-center p-4 border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all group !rounded-button">
+<i class="ri-user-line ml-2 text-xl"></i>
+<span>تسجيل دخول كموظف</span>
+</button>
+</div>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.body.appendChild(modal);
+// Close modal function
+function closeModal() {
+document.body.removeChild(backdrop);
+document.body.removeChild(modal);
+}
+// Close button event
+document.getElementById('closeModal').addEventListener('click', closeModal);
+backdrop.addEventListener('click', closeModal);
+// Company login form
+function showCompanyForm() {
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">تسجيل دخول الشركة</h2>
+<p class="text-gray-600">أدخل بيانات الشركة للمتابعة</p>
+</div>
+<form id="companyLoginForm" class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني للشركة</label>
+<input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل البريد الإلكتروني">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+<input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل كلمة المرور">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">رقم السجل التجاري</label>
+<input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل رقم السجل التجاري">
+</div>
+<button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-all !rounded-button">تسجيل الدخول</button>
+<div class="text-center">
+<a href="#" class="text-primary hover:underline text-sm">نسيت كلمة المرور؟</a>
+</div>
+</form>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('companyLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+// Add your company login logic here
+closeModal();
+});
+}
+// Employee login form
+function showEmployeeForm() {
+modal.innerHTML = `
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold text-primary mb-2">تسجيل دخول الموظف</h2>
+<p class="text-gray-600">أدخل بيانات الموظف للمتابعة</p>
+</div>
+<form id="employeeLoginForm" class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+<input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل البريد الإلكتروني">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+<input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل كلمة المرور">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">الرقم الوظيفي</label>
+<input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="أدخل الرقم الوظيفي">
+</div>
+<button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-all !rounded-button">تسجيل الدخول</button>
+<div class="text-center">
+<a href="#" class="text-primary hover:underline text-sm">نسيت كلمة المرور؟</a>
+</div>
+</form>
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600" id="closeModal">
+<i class="ri-close-line text-xl"></i>
+</button>
+`;
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('employeeLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+// Add your employee login logic here
+closeModal();
+});
+}
+// Add click events for company and employee buttons
+document.getElementById('companyBtn').addEventListener('click', showCompanyForm);
+document.getElementById('employeeBtn').addEventListener('click', showEmployeeForm);
+});
+});
+</script>
+<!-- Language toggle script -->
+<script id="languageToggleScript">
+document.addEventListener('DOMContentLoaded', function() {
+const langToggle = document.getElementById('langToggle');
+langToggle.addEventListener('click', function() {
+const html = document.documentElement;
+if (html.lang === 'ar') {
+html.lang = 'en';
+html.dir = 'ltr';
+langToggle.textContent = 'AR / EN';
+} else {
+html.lang = 'ar';
+html.dir = 'rtl';
+langToggle.textContent = 'EN / AR';
+}
+});
+});
+</script>
+<!-- Chat functionality script -->
+<script id="chatScript">
+document.addEventListener('DOMContentLoaded', function() {
+const chatInput = document.getElementById('chatInput');
+const sendMessage = document.getElementById('sendMessage');
+const chatMessages = document.getElementById('chatMessages');
+function addMessage(message, isUser = false) {
+const messageDiv = document.createElement('div');
+messageDiv.className = `chat-message flex ${isUser ? 'justify-end' : ''}`;
+if (isUser) {
+messageDiv.innerHTML = `
+<div class="bg-primary text-white rounded-lg p-3 max-w-[80%]">
+<p class="text-sm">${message}</p>
+</div>
+`;
+} else {
+messageDiv.innerHTML = `
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center ml-2 mt-1">
+<i class="ri-robot-line"></i>
+</div>
+<div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+<p class="text-sm">${message}</p>
+</div>
+`;
+}
+chatMessages.appendChild(messageDiv);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function handleUserMessage() {
+const message = chatInput.value.trim();
+if (message) {
+addMessage(message, true);
+chatInput.value = '';
+// Simulate AI response
+setTimeout(() => {
+const typingDiv = document.createElement('div');
+typingDiv.className = 'chat-message flex';
+typingDiv.innerHTML = `
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center ml-2 mt-1">
+<i class="ri-robot-line"></i>
+</div>
+<div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+<p class="text-sm typing-animation">جاري الكتابة</p>
+</div>
+`;
+chatMessages.appendChild(typingDiv);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+setTimeout(() => {
+chatMessages.removeChild(typingDiv);
+let response = "شكراً لسؤالك! يمكنني مساعدتك في ذلك. هل تحتاج إلى مزيد من المعلومات؟";
+if (message.includes("موظف") || message.includes("إضافة")) {
+response = "لإضافة موظف جديد، يمكنك النقر على 'إضافة موظف جديد' من الإجراءات السريعة أو الانتقال إلى قسم الموظفين وإضافة موظف من هناك.";
+} else if (message.includes("إجازة") || message.includes("غياب")) {
+response = "لإدارة الإجازات، يمكنك الانتقال إلى قسم 'الإجازات' من القائمة الجانبية، ومن ثم يمكنك إضافة أو مراجعة طلبات الإجازات.";
+} else if (message.includes("تقرير") || message.includes("إحصائيات")) {
+response = "يمكنك إنشاء تقارير مخصصة من قسم 'التقارير' في القائمة الجانبية. هناك يمكنك اختيار نوع التقرير والفترة الزمنية والبيانات التي ترغب في تضمينها.";
+}
+addMessage(response);
+}, 1500);
+}, 500);
+}
+}
+sendMessage.addEventListener('click', handleUserMessage);
+chatInput.addEventListener('keypress', function(event) {
+if (event.key === 'Enter') {
+handleUserMessage();
+}
+});
+});
+</script>
+<!-- Charts script -->
+<script id="chartsScript">
+document.addEventListener('DOMContentLoaded', function() {
+// Department distribution chart
+const departmentChart = echarts.init(document.getElementById('departmentChart'));
+const departmentOption = {
+animation: false,
+tooltip: {
+trigger: 'item',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+borderColor: '#eee',
+borderWidth: 1,
+textStyle: {
+color: '#1f2937'
+}
+},
+legend: {
+orient: 'vertical',
+right: 10,
+top: 'center',
+textStyle: {
+color: '#1f2937'
+}
+},
+series: [
+{
+name: 'توزيع الموظفين',
+type: 'pie',
+radius: ['40%', '70%'],
+avoidLabelOverlap: false,
+itemStyle: {
+borderRadius: 8,
+borderColor: '#fff',
+borderWidth: 2
+},
+label: {
+show: false
+},
+emphasis: {
+label: {
+show: true,
+fontSize: '14',
+fontWeight: 'bold'
+}
+},
+labelLine: {
+show: false
+},
+data: [
+{ value: 95, name: 'تطوير البرمجيات', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+{ value: 68, name: 'التسويق', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+{ value: 42, name: 'الموارد البشرية', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
+{ value: 43, name: 'المالية', itemStyle: { color: 'rgba(252, 141, 98, 1)' } }
+]
+}
+]
+};
+departmentChart.setOption(departmentOption);
+// Hiring rate chart
+const hiringChart = echarts.init(document.getElementById('hiringChart'));
+const hiringOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+borderColor: '#eee',
+borderWidth: 1,
+textStyle: {
+color: '#1f2937'
+}
+},
+grid: {
+left: '3%',
+right: '4%',
+bottom: '3%',
+containLabel: true
+},
+xAxis: {
+type: 'category',
+boundaryGap: false,
+data: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+axisLine: {
+lineStyle: {
+color: '#ddd'
+}
+},
+axisLabel: {
+color: '#1f2937'
+}
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: {
+color: '#ddd'
+}
+},
+axisLabel: {
+color: '#1f2937'
+},
+splitLine: {
+lineStyle: {
+color: '#eee'
+}
+}
+},
+series: [
+{
+name: 'التوظيفات الجديدة',
+type: 'line',
+smooth: true,
+lineStyle: {
+width: 3,
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.3)'
+},
+{
+offset: 1,
+color: 'rgba(87, 181, 231, 0.1)'
+}
+])
+},
+emphasis: {
+focus: 'series'
+},
+data: [12, 15, 8, 10, 18, 25]
+},
+{
+name: 'الاستقالات',
+type: 'line',
+smooth: true,
+lineStyle: {
+width: 3,
+color: 'rgba(252, 141, 98, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+{
+offset: 0,
+color: 'rgba(252, 141, 98, 0.3)'
+},
+{
+offset: 1,
+color: 'rgba(252, 141, 98, 0.1)'
+}
+])
+},
+emphasis: {
+focus: 'series'
+},
+data: [5, 3, 6, 4, 7, 5]
+}
+]
+};
+hiringChart.setOption(hiringOption);
+// Handle window resize
+window.addEventListener('resize', function() {
+departmentChart.resize();
+hiringChart.resize();
+});
+});
+</script>
+</body>
+</html>
